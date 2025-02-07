@@ -1,16 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(CubeColorChanger))]
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private Color _defaultColor;
-    [SerializeField] private Color _timerOnColor;
     [SerializeField] private float _minTimeToDisable;
     [SerializeField] private float _maxTimeToDisable;
     [SerializeField] private int _platformLayer;
 
     private Coroutine _timerToDisableCoroutine;
-    private Material _material;
+    private CubeColorChanger _colorChanger;
 
     private void OnValidate()
     {
@@ -20,7 +19,7 @@ public class Cube : MonoBehaviour
 
     private void Awake()
     {
-        _material = GetComponent<Renderer>().material;
+        _colorChanger = GetComponent<CubeColorChanger>();
     }
 
     private void OnDisable()
@@ -32,7 +31,7 @@ public class Cube : MonoBehaviour
     {
         if (collision.gameObject.layer == _platformLayer && _timerToDisableCoroutine == null)
         {
-            SetTimerOnColor();
+            _colorChanger.SetTimerOnColor();
             StartTimerToDisable();
         }
     }
@@ -49,11 +48,6 @@ public class Cube : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void SetTimerOnColor()
-    {
-        _material.color = _timerOnColor;
-    }
-
     private float GetTimeToDisable()
     {
         return Random.Range(_minTimeToDisable, _maxTimeToDisable);
@@ -62,7 +56,8 @@ public class Cube : MonoBehaviour
     private void Reset()
     {
         transform.position = Vector3.zero;
-        _material.color = _defaultColor;
         _timerToDisableCoroutine = null;
+
+        _colorChanger.Reset();
     }
 }

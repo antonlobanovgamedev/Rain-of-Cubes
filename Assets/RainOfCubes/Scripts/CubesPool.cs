@@ -1,45 +1,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubesPool : MonoBehaviour 
+[RequireComponent(typeof(CubesCreator))]
+public class CubesPool : MonoBehaviour
 {
     [SerializeField] private int _initCapacity;
-    [SerializeField] private Cube _cubePrefab;
 
     private List<Cube> _pool;
+    private CubesCreator _spawner;
 
     private void Awake()
     {
         _pool = new List<Cube>(_initCapacity);
+        _spawner = GetComponent<CubesCreator>();
     }
 
     private void Start()
     {
-        CreateCubes(_initCapacity);
+        _pool.AddRange(_spawner.Create(_initCapacity));
     }
 
-    public Cube GetCube()
+    public Cube Get()
     {
         if (TryGetNotActiveCube(out Cube cube))
+        {
             return cube;
+        }
         else
-            return CreateCube();
-    }
+        {
+            Cube newCube = _spawner.Create();
+            _pool.Add(newCube);
 
-    private void CreateCubes(int count)
-    {
-        for (int i = 0; i < _pool.Count; i++)
-            CreateCube();
-    }
-
-    private Cube CreateCube()
-    {
-        Cube cube = Instantiate(_cubePrefab, transform);
-
-        cube.gameObject.SetActive(false);
-        _pool.Add(cube);
-
-        return cube;
+            return newCube;
+        }
     }
 
     private bool TryGetNotActiveCube(out Cube notActiveCube)

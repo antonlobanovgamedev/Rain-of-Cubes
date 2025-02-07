@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 32871154}
   - component: {fileID: 32871153}
   m_Layer: 0
-  m_Name: CubeSpawner
+  m_Name: CubePlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -752,6 +752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1121216656}
   - component: {fileID: 1121216655}
+  - component: {fileID: 1121216657}
   m_Layer: 0
   m_Name: CubesPool
   m_TagString: Untagged
@@ -771,8 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856014caf888ae041b274f9d4bf10b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initCapacity: 20
-  _cubePrefab: {fileID: 726303706401513375, guid: 7fb0bf081f9e95f418b5a80b86977ff5, type: 3}
+  _initCapacity: 250
 --- !u!4 &1121216656
 Transform:
   m_ObjectHideFlags: 0
@@ -788,6 +788,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1121216657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121216654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28241fddf0f8f554a93e9ea069580b80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cubePrefab: {fileID: 726303706401513375, guid: 7fb0bf081f9e95f418b5a80b86977ff5, type: 3}
 --- !u!1 &1165234680
 GameObject:
   m_ObjectHideFlags: 0
