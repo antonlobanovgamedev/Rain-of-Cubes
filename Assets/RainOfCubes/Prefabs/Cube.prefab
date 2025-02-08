@@ -150,8 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fab3b31c51413f44895551bdc16acaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minTimeToDisable: 2
-  _maxTimeToDisable: 5
+  _minTimeToReset: 2
+  _maxTimeToReset: 5
   _platformLayer: 6
 --- !u!114 &3380938969304991870
 MonoBehaviour:

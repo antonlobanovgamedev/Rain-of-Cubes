@@ -1,24 +1,31 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CubeColorChanger))]
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private float _minTimeToDisable;
-    [SerializeField] private float _maxTimeToDisable;
+    public event Action<Cube> TimerHasExpired;
+
+    [SerializeField] private float _minTimeToReset;
+    [SerializeField] private float _maxTimeToReset;
     [SerializeField] private int _platformLayer;
 
-    private Coroutine _timerToDisableCoroutine;
+    private Coroutine _waitToResetCoroutine;
+    private Rigidbody _rigidbody;
     private CubeColorChanger _colorChanger;
 
     private void OnValidate()
     {
-        if (_maxTimeToDisable < _minTimeToDisable)
-            _maxTimeToDisable = _minTimeToDisable;
+        if (_maxTimeToReset < _minTimeToReset)
+            _maxTimeToReset = _minTimeToReset;
     }
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         _colorChanger = GetComponent<CubeColorChanger>();
     }
 
@@ -29,34 +36,37 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == _platformLayer && _timerToDisableCoroutine == null)
+        if (collision.gameObject.layer == _platformLayer && _waitToResetCoroutine == null)
         {
             _colorChanger.SetTimerOnColor();
-            StartTimerToDisable();
+            StartTimerToReset();
         }
     }
 
-    private void StartTimerToDisable()
+    private void StartTimerToReset()
     {
-        _timerToDisableCoroutine = StartCoroutine(TimerToDisableCoroutine());
+        _waitToResetCoroutine = StartCoroutine(WaitToResetCoroutine());
     }
 
-    private IEnumerator TimerToDisableCoroutine()
+    private IEnumerator WaitToResetCoroutine()
     {
-        yield return new WaitForSeconds(GetTimeToDisable());
+        yield return new WaitForSeconds(GetTimeToReset());
 
         gameObject.SetActive(false);
+        TimerHasExpired?.Invoke(this);
     }
 
-    private float GetTimeToDisable()
+    private float GetTimeToReset()
     {
-        return Random.Range(_minTimeToDisable, _maxTimeToDisable);
+        return UnityEngine.Random.Range(_minTimeToReset, _maxTimeToReset);
     }
 
     private void Reset()
     {
         transform.position = Vector3.zero;
-        _timerToDisableCoroutine = null;
+        _waitToResetCoroutine = null;
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
 
         _colorChanger.Reset();
     }
